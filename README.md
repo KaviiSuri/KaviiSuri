@@ -1,4 +1,7 @@
 ![matrix.gif](https://github.com/KaviiSuri/KaviiSuri/raw/master/matrix.gif)
+Like the gif? [check out the code 👆](https://github.com/KaviiSuri/matrixgif.git)
+
+
 ### Hi there 👋
 I am Kavii Suri, a Computer Science Student at NIT Silchar who loves to learn. Intrested in AI, Web Development and Computer Science In general. I'm currently working as a Web Developer and AI Engineer at [Smoketrees](https://smoketrees.dev/)
 - 🔭 I'm currently working on a ReactJS based site and a GAN related project relating to AI powered photo generation primarily. Also exploring new and exciting ideas as always!
