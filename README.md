@@ -1,4 +1,4 @@
-![matrix.gif](https://github.com/KaviiSuri/KaviiSuri/raw/master/matrix.gif)
+![matrix.gif](https://github.com/KaviiSuri/KaviiSuri/raw/master/matrix-optimized.gif)
 Like the gif? [check out the code 👆](https://github.com/KaviiSuri/matrixgif.git)
 
 
