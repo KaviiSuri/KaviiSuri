@@ -10,7 +10,7 @@ I am Kavii Suri, a Computer Science Student at NIT Silchar who loves to learn. I
 - 💬 Ask me about ML and webdev
 
 ### My Skills include
-* Tensorflow JS
+* Tensorflow
 * Machine Learning/ Deep Learning
 * Python
 * React JS
