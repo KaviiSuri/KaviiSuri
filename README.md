@@ -4,19 +4,22 @@ Like the gif? [check out the code 👆](https://github.com/KaviiSuri/matrixgif.g
 
 ### Hi there 👋
 I am Kavii Suri, a Computer Science Student at NIT Silchar who loves to learn. Intrested in AI, Web Development and Computer Science In general. I'm the co-founder of [Black Marbles Tech](www.blackmarbles.tech) and work there as a Web Developer and AI Engineer.
-- 🔭 I'm currently working on a ReactJS and FastAPI based site and a GradCam related project relating to explainablity in neural networks and deep learning for CNN based architecture. Also exploring new and exciting ideas as always!
-- 🌱 I'm currently learning more of ML and Tensorflow along with docker
-- 👯 I’m looking to collaborate on ML or Web related projects.
+- 🔭 I'm currently working as a SDE Intern at [procol](procol.io). Also exploring new and exciting ideas as always!
+- 🌱 I'm currently learning more of rust and golang.
+- 👯 I’m looking to collaborate on Rust, Golang, Web or C++ related projects.
 - 💬 Ask me about ML and webdev
 
 ### My Skills include
+* React JS
+* Node JS & express
+* MongoDB
+* Rust
+* Golang
+* Ruby On Rails
 * Tensorflow
 * Pytorch
 * Machine Learning/ Deep Learning
 * Python
-* React JS
-* Node JS & express
-* MongoDB
 * FastAPI
 
 ### Hit Me Up!
