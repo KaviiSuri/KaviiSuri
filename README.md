@@ -135,4 +135,4 @@ Now at **[CAMB.AI](https://camb.ai)**, building lip-sync and dubbing agents. Bef
 [![LinkedIn](https://img.shields.io/badge/-Kavii_Suri-0077B5?style=flat-square)](https://www.linkedin.com/in/kavii-suri-a23286194/)
 [![Mail](https://img.shields.io/badge/-surikavii@gmail.com-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:surikavii@gmail.com)
 
-🦇 The first commit in every repo I start is called `batman`. The banner is generated, and [here's the code](banner/banner.mjs).
+🦇 The first commit in every repo I start is called `batman`.
