@@ -1,4 +1,7 @@
-![matrix.gif](https://github.com/KaviiSuri/KaviiSuri/raw/master/matrix-optimized.gif)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="banner/banner-dark.gif">
+  <img alt="A box labelled FRONTEND? snaps shut around Kavii's stack and bursts back open into a T" src="banner/banner-light.gif">
+</picture>
 
 # Hi, I'm Kavii 👋
 
@@ -132,4 +135,4 @@ Now at **[CAMB.AI](https://camb.ai)**, building lip-sync and dubbing agents. Bef
 [![LinkedIn](https://img.shields.io/badge/-Kavii_Suri-0077B5?style=flat-square)](https://www.linkedin.com/in/kavii-suri-a23286194/)
 [![Mail](https://img.shields.io/badge/-surikavii@gmail.com-D14836?style=flat-square&logo=gmail&logoColor=white)](mailto:surikavii@gmail.com)
 
-🦇 The first commit in every repo I start is called `batman`. The gif is generated, and [here's the code](https://github.com/KaviiSuri/matrixgif).
+🦇 The first commit in every repo I start is called `batman`. The banner is generated, and [here's the code](banner/banner.mjs).
