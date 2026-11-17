@@ -1,7 +1,6 @@
-// t-snap-final: the T snaps shut into a box, gets a FRONTEND? / BACKEND? / ML? label
-// slapped on, strains (sides bulge, lid lifts), bursts, the tag rips off, back to the T.
-// Three 3 s beats, one label each. Name + headline never leave.
-// Usage: node t-snap-final.mjs <outdir> [dark|light]
+// t-snap-me: Kavii (a little drawn figure) sits on the open T. The T folds up around him into a box,
+// the box strains and bulges, bursts open, the walls slam flat and he pops back up. 3 s loop.
+// Usage: node t-snap-me.mjs <outdir> [dark|light]
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -12,9 +11,7 @@ for (const f of fs.readdirSync(OUT)) fs.unlinkSync(path.join(OUT, f));
 
 const W = 1280, H = 320, FPS = 15, BEAT = 45;
 const TAGS = [
-  { text: 'FRONTEND?', rot: -6 },
-  { text: 'BACKEND?', rot: 5 },
-  { text: 'ML?', rot: -9 },
+  { rot: 0 }, // one beat: same capture attempt every loop
 ];
 const N = BEAT * TAGS.length;
 const LIGHT = THEME === 'light';
@@ -107,24 +104,41 @@ const affine = (p00, p10, p01) =>
 
 // camera poses
 // camera poses
-const T_VIEW = { S: 116, phi: 40, psi: 0, cx: 345, cy: 58 };
+const T_VIEW = { S: 121, phi: 40, psi: 0, cx: 345, cy: 58 };
 const BOX_VIEW = { S: 124, phi: 27, psi: 30, cx: 350, cy: 212 };
 const camAt = (m, wob = 0) => makeCam(
   lerp(T_VIEW.cx, BOX_VIEW.cx, m), lerp(T_VIEW.cy, BOX_VIEW.cy, m), lerp(T_VIEW.S, BOX_VIEW.S, m),
   rad(lerp(T_VIEW.phi, BOX_VIEW.phi, m)), rad(lerp(T_VIEW.psi, BOX_VIEW.psi, m)) + wob);
 
-// plain label sticker, same style as t-snap
-const tagSvg = (tag, extraScale = 1) => `
-  <g transform="rotate(${tag.rot}) scale(${fmt(extraScale)})">
-    <rect x="-108" y="-38" width="224" height="92" rx="6" fill="#000" opacity="0.3"/>
-    <rect x="-112" y="-46" width="224" height="92" rx="6" fill="#fbf6ea"/>
-    <text x="0" y="15" font-family="${TAG_FONT}" font-size="44" fill="#1d1a16" text-anchor="middle">${tag.text}</text>
+// Kavii as a little drawn figure: round head, dot eyes, hands on hips, an orange T on his chest.
+// Drawn in a 100-unit box centred on (0,0); cheer = arms up while he pops out.
+const FIG_INK = '#2b1d10', FIG_BODY = '#f4ead6', FIG_SKIN = '#f6dcb8';
+const avatarSvg = (x, y, d, sq = 1, cheer = 0) => {
+  const k = d / 100;
+  const armL = cheer > 0.5 ? 'M-17,-4 L-30,-20 L-33,-36' : 'M-18,-2 L-33,10 L-20,20';
+  const armR = cheer > 0.5 ? 'M17,-4 L30,-20 L33,-36' : 'M18,-2 L33,10 L20,20';
+  return `<g transform="translate(${fmt(x)} ${fmt(y)}) scale(${fmt(k / sq)} ${fmt(k * sq)})" stroke-linejoin="round" stroke-linecap="round">
+    <ellipse cx="2" cy="48" rx="30" ry="6" fill="#000" opacity="${SHADOW}"/>
+    <rect x="-14" y="22" width="10" height="25" rx="4" fill="${FIG_INK}"/>
+    <rect x="4" y="22" width="10" height="25" rx="4" fill="${FIG_INK}"/>
+    <path d="${armL}" fill="none" stroke="${FIG_INK}" stroke-width="11"/>
+    <path d="${armR}" fill="none" stroke="${FIG_INK}" stroke-width="11"/>
+    <path d="${armL}" fill="none" stroke="${FIG_BODY}" stroke-width="5"/>
+    <path d="${armR}" fill="none" stroke="${FIG_BODY}" stroke-width="5"/>
+    <rect x="-21" y="-10" width="42" height="40" rx="13" fill="${FIG_BODY}" stroke="${FIG_INK}" stroke-width="3.5"/>
+    <rect x="-11" y="-1" width="22" height="7" rx="1.5" fill="${rgb(ORANGE)}"/>
+    <rect x="-3.5" y="-1" width="7" height="20" rx="1.5" fill="${rgb(ORANGE)}"/>
+    <circle cx="0" cy="-29" r="19" fill="${FIG_SKIN}" stroke="${FIG_INK}" stroke-width="3.5"/>
+    <path d="M-19,-31 C-19,-52 19,-52 19,-31 C12,-40 2,-42 -6,-37 C-11,-35 -16,-34 -19,-31 Z" fill="${FIG_INK}"/>
+    <circle cx="-6.5" cy="-26" r="2.8" fill="${FIG_INK}" stroke="none"/>
+    <circle cx="6.5" cy="-26" r="2.8" fill="${FIG_INK}" stroke="none"/>
   </g>`;
+};
 
 // ---------- one beat (45 frames = 3 s) ----------
 // 0-13 T held | 12-16 side cells slide in | 14-20 fold (quick) | 20 shut
-// 20-23 label slapped on | 23-28 strain: sides bulge, lid lifts, light leaks
-// 28 BURST: walls blow open, tag rips off | 28-36 back to T | 36-44 T held
+// 20-23 slam | 23-28 strain: sides bulge, lid lifts, light leaks
+// 28 BURST: walls blow open, Kavii pops back up | 28-36 back to T | 36-44 T held
 // Closed box on screen frames 20-28 (9 of 45).
 function frame(g) {
   const beat = Math.floor(g / BEAT), f = g % BEAT;
@@ -204,7 +218,7 @@ function frame(g) {
     svg.push(`<polygon points="${pts.map(p => `${fmt(p.x)},${fmt(p.y)}`).join(' ')}" fill="${rgb(col)}" stroke="${BG}" stroke-width="2.5"/>`);
     if (label && la > 0) {
       const mx = (p00.x + p11.x) / 2, my = (p00.y + p11.y) / 2;
-      svg.push(`<text x="${fmt(mx)}" y="${fmt(my + 11)}" font-family="${LABEL_FONT}" font-weight="bold" font-size="29" letter-spacing="1" fill="${INK}" text-anchor="middle" opacity="${fmt(la)}">${label}</text>`);
+      svg.push(`<text x="${fmt(mx)}" y="${fmt(my + 12)}" font-family="${LABEL_FONT}" font-weight="bold" font-size="32" letter-spacing="1" fill="${INK}" text-anchor="middle" opacity="${fmt(la)}">${label}</text>`);
     }
   };
   if (e > 0.001 && (burst ? f >= 30 : true)) {
@@ -227,9 +241,33 @@ function frame(g) {
   const sx = 1 + 0.12 * strain * pulse, sy = 1 - 0.05 * strain * pulse;
   svg.push(`<g transform="translate(${fmt(bc.x)} ${fmt(bc.y)}) scale(${fmt(sx)} ${fmt(sy)}) translate(${fmt(-bc.x)} ${fmt(-bc.y)})">`);
   const stemCol = { D: ORANGE, E: ORANGE.map(v => v * 0.86), F: ORANGE.map(v => v * 0.74) };
-  const labels = { A: 'BACKEND', B: 'DATA', C: 'ML', D: 'AI MEDIA' };
+  const labels = { A: 'BACKEND', B: 'DATA', C: 'ML', E: 'AI MEDIA' };
   const labelA = clamp((flat - 0.55) / 0.45);
+  // avatar: sits on the stem top (D), sinks into the box as it folds, pops back up after the burst
+  const P_T = [0, 0, 1.0], P_IN = [0, 0.45, 0];
+  let av = null;
+  if (!burst && f < 19) {
+    const t = easeInOut(seg(f, 13, 18));
+    const p = P_T.map((v, i) => lerp(v, P_IN[i], t));
+    av = { p, k: lerp(1, 0.78, t), sq: 1 };
+  } else if (burst && f >= 29) {
+    const t = easeOut(seg(f, 29, 36));
+    const p = P_T.map((v, i) => lerp(P_IN[i], v, t));
+    p[1] += 0.8 * Math.sin(Math.PI * seg(f, 29, 36)); // jump out
+    const pop = easeOutBack(seg(f, 29, 33), 2.6);
+    const land = f >= 36 && f < 40 ? Math.sin(Math.PI * seg(f, 36, 40)) * 0.12 : 0; // squash on landing
+    av = { p, k: lerp(0.5, 1, Math.min(pop, 1.15)), sq: 1 - land, cheer: f < 38 ? 1 : 0 };
+  }
+  const drawAvatar = () => {
+    if (!av) return;
+    const c = cam.proj([av.p[0], av.p[1] + (burst ? 0 : lift), av.p[2]]);
+    svg.push(avatarSvg(c.x, c.y - 6, 112 * (S / 121) * av.k, av.sq, av.cheer || 0));
+  };
+  const avD = av ? cam.proj(av.p).d : Infinity;
+  const avOnTop = flat > 0.98 || burst;
+  let avDone = false;
   for (const fc of list) {
+    if (!avOnTop && !avDone && fc.d > avD && fc.name !== 'B') { drawAvatar(); avDone = true; }
     const [p00, p10, p01] = fc.pr;
     const p11 = { x: p10.x + p01.x - p00.x, y: p10.y + p01.y - p00.y };
     const insideVisible = dot(fc.n, cam.V) > 0;
@@ -243,19 +281,13 @@ function frame(g) {
       if (fc.name === 'E') svg.push(`<g transform="${affine(p00, p10, p01)}"><rect x="0.38" y="0" width="0.24" height="1" fill="#e3c48f" opacity="0.85"/></g>`);
     } else if (labels[fc.name] && labelA > 0) {
       const mx = (p00.x + p11.x) / 2, my = (p00.y + p11.y) / 2;
-      svg.push(`<text x="${fmt(mx)}" y="${fmt(my + 11)}" font-family="${LABEL_FONT}" font-weight="bold" font-size="29" letter-spacing="1" fill="${fc.name === 'D' ? '#1b0f07' : INK}" text-anchor="middle" opacity="${fmt(labelA)}">${labels[fc.name]}</text>`);
+      svg.push(`<text x="${fmt(mx)}" y="${fmt(my + 12)}" font-family="${LABEL_FONT}" font-weight="bold" font-size="32" letter-spacing="1" fill="${fc.name === 'E' ? '#1b0f07' : INK}" text-anchor="middle" opacity="${fmt(labelA)}">${labels[fc.name]}</text>`);
     }
   }
-  // label slapped on the front
-  const slapT = f >= 20 && f < BURST ? easeOutBack(seg(f, 20, 23), 2.4) : 0;
-  if (slapT > 0) {
-    const D = list.find(x => x.name === 'D').pr;
-    const c = { x: (D[1].x + D[2].x) / 2, y: (D[1].y + D[2].y) / 2 };
-    svg.push(`<g transform="translate(${fmt(c.x)} ${fmt(c.y + 18)}) scale(${fmt(0.82 * lerp(2.0, 1, slapT) / sx)} ${fmt(0.82 * lerp(2.0, 1, slapT) / sy)})">${tagSvg(tag)}</g>`);
-  }
+  if (!avDone && !avOnTop) drawAvatar();
   svg.push(`</g>`);
 
-  // slap impact lines
+  // slam impact lines
   if (f >= 20 && f < 24) {
     const t = seg(f, 20, 24);
     const c = boxCentre;
@@ -279,16 +311,6 @@ function frame(g) {
     svg.push(`</g>`);
   }
 
-  // tag ripped off, flung up and out of frame
-  if (f >= BURST && f < 37) {
-    const P = placeFace('D', { A: 0, C: 0, D: rad(90), E: rad(90), F: rad(90) }, 0).map(camAt(1).proj);
-    const c0 = { x: (P[1].x + P[2].x) / 2, y: (P[1].y + P[2].y) / 2 };
-    const t = (f - BURST) / FPS;
-    const spin = beat % 2 ? -1 : 1;
-    const x = c0.x - 380 * t, y = c0.y - 1150 * t + 700 * t * t;
-    svg.push(`<g transform="translate(${fmt(x)} ${fmt(y)}) rotate(${fmt(tag.rot + spin * 480 * t)}) scale(0.8)">${tagSvg({ ...tag, rot: 0 })}</g>`);
-  }
-
   // stem depth ticks, running off the bottom edge
   if (flat > 0.05) {
     const sc = cam.proj([0.5, 0, 0.5]); // right edge of stem, top of AI MEDIA
@@ -300,6 +322,8 @@ function frame(g) {
     svg.push(`</g>`);
   }
   svg.push(`<rect x="0" y="262" width="700" height="58" fill="url(#deep)" opacity="${fmt(flat)}"/>`);
+
+  if (avOnTop) drawAvatar();
 
   // name + headline: always on screen
   const kick = f >= BURST && f < 36 ? Math.sin(Math.PI * seg(f, BURST, 36)) : 0;

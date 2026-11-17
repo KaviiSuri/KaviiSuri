@@ -1,6 +1,6 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="banner/banner-dark.gif">
-  <img alt="A box labelled FRONTEND? snaps shut around Kavii's stack and bursts back open into a T" src="banner/banner-light.gif">
+  <img alt="A box snaps shut around Kavii and bursts back open into a T: broad across the stack, deep in AI media" src="banner/banner-light.gif">
 </picture>
 
 # Hi, I'm Kavii 👋
