@@ -110,7 +110,7 @@ const camAt = (m, wob = 0) => makeCam(
   lerp(T_VIEW.cx, BOX_VIEW.cx, m), lerp(T_VIEW.cy, BOX_VIEW.cy, m), lerp(T_VIEW.S, BOX_VIEW.S, m),
   rad(lerp(T_VIEW.phi, BOX_VIEW.phi, m)), rad(lerp(T_VIEW.psi, BOX_VIEW.psi, m)) + wob);
 
-// Kavii as a little drawn figure: round head, dot eyes, hands on hips, an orange T on his chest.
+// Kavii as a little drawn figure: round head, dot eyes, hands on hips, plain shirt.
 // Drawn in a 100-unit box centred on (0,0); cheer = arms up while he pops out.
 const FIG_INK = '#2b1d10', FIG_BODY = '#f4ead6', FIG_SKIN = '#f6dcb8';
 const avatarSvg = (x, y, d, sq = 1, cheer = 0) => {
@@ -126,8 +126,6 @@ const avatarSvg = (x, y, d, sq = 1, cheer = 0) => {
     <path d="${armL}" fill="none" stroke="${FIG_BODY}" stroke-width="5"/>
     <path d="${armR}" fill="none" stroke="${FIG_BODY}" stroke-width="5"/>
     <rect x="-21" y="-10" width="42" height="40" rx="13" fill="${FIG_BODY}" stroke="${FIG_INK}" stroke-width="3.5"/>
-    <rect x="-11" y="-1" width="22" height="7" rx="1.5" fill="${rgb(ORANGE)}"/>
-    <rect x="-3.5" y="-1" width="7" height="20" rx="1.5" fill="${rgb(ORANGE)}"/>
     <circle cx="0" cy="-29" r="19" fill="${FIG_SKIN}" stroke="${FIG_INK}" stroke-width="3.5"/>
     <path d="M-19,-31 C-19,-52 19,-52 19,-31 C12,-40 2,-42 -6,-37 C-11,-35 -16,-34 -19,-31 Z" fill="${FIG_INK}"/>
     <circle cx="-6.5" cy="-26" r="2.8" fill="${FIG_INK}" stroke="none"/>
